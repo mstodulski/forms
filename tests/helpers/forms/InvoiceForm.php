@@ -1,11 +1,11 @@
 <?php
-namespace app\admin\forms;
+namespace test\forms\helpers\forms;
 
-use app\admin\entities\Customer;
-use app\admin\entities\InvoiceCategory;
-use app\admin\entities\InvoicePosition;
-use app\admin\entities\WarehouseDocument;
-use app\admin\services\FileService;
+use test\forms\helpers\entities\Customer;
+use test\forms\helpers\entities\InvoiceCategory;
+use test\forms\helpers\entities\InvoicePosition;
+use test\forms\helpers\entities\WarehouseDocument;
+use test\forms\helpers\services\FileService;
 use Exception;
 use mstodulski\forms\Form;
 use mstodulski\forms\types\CheckboxType;

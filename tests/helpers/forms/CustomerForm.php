@@ -1,7 +1,7 @@
 <?php
-namespace app\admin\forms;
+namespace test\forms\helpers\forms;
 
-use app\admin\entities\User;
+use test\forms\helpers\entities\User;
 use Exception;
 use mstodulski\forms\Form;
 use mstodulski\forms\types\DateTimeType;

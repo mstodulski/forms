@@ -5,9 +5,8 @@
 	"require": {
 		"php": ">=8.0",
 		"phpunit/phpunit": "9.5.*",
-		"symfony/var-dumper": "5.2.x-dev",
-		"smarty/smarty": "3.1.*",
-		"ext-pdo": "*"
+		"symfony/var-dumper": "5.3.*",
+		"smarty/smarty": "3.1.*"
 	},
 	"keywords": ["library", "orm", "db", "database"],
 	"homepage": "https://devsprint.pl",
@@ -21,7 +20,7 @@
 	"autoload": {
 		"psr-4": {
 			"mstodulski\\forms\\": "src",
-			"app\\admin\\": "tests/helpers"
+			"test\\forms\\helpers\\": "tests/helpers"
 		}
 	},
 	"bin": ["bin/morm"],

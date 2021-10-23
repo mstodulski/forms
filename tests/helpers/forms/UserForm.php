@@ -1,5 +1,5 @@
 <?php
-namespace app\admin\forms;
+namespace test\forms\helpers\forms;
 
 use mstodulski\forms\Form;
 use mstodulski\forms\types\DateTimeType;

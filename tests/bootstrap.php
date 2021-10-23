@@ -1,12 +1,12 @@
 <?php
 
-use app\admin\entities\Customer;
-use app\admin\entities\Invoice;
-use app\admin\entities\InvoiceCategory;
-use app\admin\entities\InvoiceFile;
-use app\admin\entities\InvoicePosition;
-use app\admin\entities\User;
-use app\admin\entities\WarehouseDocument;
+use test\forms\helpers\entities\Customer;
+use test\forms\helpers\entities\Invoice;
+use test\forms\helpers\entities\InvoiceCategory;
+use test\forms\helpers\entities\InvoiceFile;
+use test\forms\helpers\entities\InvoicePosition;
+use test\forms\helpers\entities\User;
+use test\forms\helpers\entities\WarehouseDocument;
 
 require_once 'vendor/autoload.php';
 

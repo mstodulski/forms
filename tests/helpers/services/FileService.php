@@ -1,7 +1,7 @@
 <?php
-namespace app\admin\services;
+namespace test\forms\helpers\services;
 
-use app\admin\entities\InvoiceFile;
+use test\forms\helpers\entities\InvoiceFile;
 use mstodulski\forms\FormError;
 
 class FileService {

@@ -10,9 +10,9 @@
 
 namespace mstodulski\forms;
 
-use app\admin\entities\Customer;
-use app\admin\entities\InvoiceCategory;
-use app\admin\entities\WarehouseDocument;
+use test\forms\helpers\entities\Customer;
+use test\forms\helpers\entities\InvoiceCategory;
+use test\forms\helpers\entities\WarehouseDocument;
 use Exception;
 
 class TestDbBridge

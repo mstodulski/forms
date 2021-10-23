@@ -1,10 +1,9 @@
 <?php
 
-use app\admin\entities\Invoice;
-use app\admin\entities\InvoiceCategory;
-use app\admin\entities\WarehouseDocument;
-use app\admin\forms\InvoiceForm;
-use app\admin\services\FileService;
+use test\forms\helpers\entities\Invoice;
+use test\forms\helpers\entities\InvoiceCategory;
+use test\forms\helpers\entities\WarehouseDocument;
+use test\forms\helpers\forms\InvoiceForm;
 use mstodulski\forms\FormError;
 use mstodulski\forms\FormView;
 use mstodulski\forms\TestDbBridge;
@@ -75,8 +74,8 @@ class Test extends TestCase
         $this->assertEquals('collection', $formField->getType());
         $this->assertNull($formField->getValue());
 
-        $this->assertEquals('app\admin\forms\InvoicePositionForm', $formField->getOptions()['class']);
-        $this->assertEquals('app\admin\entities\InvoicePosition', $formField->getOptions()['entityClass']);
+        $this->assertEquals('test\forms\helpers\forms\InvoicePositionForm', $formField->getOptions()['class']);
+        $this->assertEquals('test\forms\helpers\entities\InvoicePosition', $formField->getOptions()['entityClass']);
         $this->assertEquals('Pozycje', $formField->getOptions()['label']);
         $this->assertEquals('positions.tpl', $formField->getOptions()['template']);
         $this->assertTrue($formField->getOptions()['mapped']);
@@ -99,7 +98,7 @@ class Test extends TestCase
         $this->assertNull($formField->getValue());
         $this->assertEquals('Kategoria główna', $formField->getOptions()['label']);
         $this->assertNull($formField->getOptions()['form']);
-        $this->assertEquals('app\admin\entities\InvoiceCategory', $formField->getOptions()['class']);
+        $this->assertEquals('test\forms\helpers\entities\InvoiceCategory', $formField->getOptions()['class']);
         $this->assertNull($formField->getOptions()['entityClass']);
         $this->assertEquals('Kategoria 1', $formField->getOptions()['choices']['222']);
         $this->assertEquals('Kategoria 3', $formField->getOptions()['choices']['444']);
@@ -166,7 +165,7 @@ class Test extends TestCase
         $this->assertEquals('multiSelectType', $formField->getType());
         $this->assertEmpty($formField->getValue());
         $this->assertEquals('Dokumenty magazynowe', $formField->getOptions()['label']);
-        $this->assertEquals('app\admin\entities\WarehouseDocument', $formField->getOptions()['class']);
+        $this->assertEquals('test\forms\helpers\entities\WarehouseDocument', $formField->getOptions()['class']);
         $this->assertEquals('PZ-1/01/2021', $formField->getOptions()['choices'][5]);
         $this->assertEquals('PZ-2/01/2021', $formField->getOptions()['choices'][6]);
         $this->assertEquals('PZ-3/01/2021', $formField->getOptions()['choices'][7]);
@@ -180,7 +179,7 @@ class Test extends TestCase
         $this->assertEquals('checkboxType', $formField->getType());
         $this->assertEmpty($formField->getValue());
         $this->assertEquals('Kategorie faktury', $formField->getOptions()['label']);
-        $this->assertEquals('app\admin\entities\InvoiceCategory', $formField->getOptions()['class']);
+        $this->assertEquals('test\forms\helpers\entities\InvoiceCategory', $formField->getOptions()['class']);
         $this->assertEquals('Kategoria 1', $formField->getOptions()['choices'][222]);
         $this->assertEquals('Kategoria 2', $formField->getOptions()['choices'][333]);
         $this->assertEquals('Kategoria 3', $formField->getOptions()['choices'][444]);
@@ -211,7 +210,7 @@ class Test extends TestCase
         $this->assertEquals('selectType', $formField->getType());
         $this->assertNull($formField->getValue());
         $this->assertEquals('Płatnik', $formField->getOptions()['label']);
-        $this->assertEquals('app\admin\entities\Customer', $formField->getOptions()['class']);
+        $this->assertEquals('test\forms\helpers\entities\Customer', $formField->getOptions()['class']);
         $this->assertEquals('Kontrahent 1', $formField->getOptions()['choices'][4]);
         $this->assertEquals('Kontrahent 2', $formField->getOptions()['choices'][5]);
         $this->assertEquals('Kontrahent 3', $formField->getOptions()['choices'][6]);
@@ -224,7 +223,7 @@ class Test extends TestCase
         $this->assertEquals('radiobuttonType', $formField->getType());
         $this->assertNull($formField->getValue());
         $this->assertEquals('Kategoria główna', $formField->getOptions()['label']);
-        $this->assertEquals('app\admin\entities\InvoiceCategory', $formField->getOptions()['class']);
+        $this->assertEquals('test\forms\helpers\entities\InvoiceCategory', $formField->getOptions()['class']);
         $this->assertEquals('Kategoria 1', $formField->getOptions()['choices'][222]);
         $this->assertEquals('Kategoria 3', $formField->getOptions()['choices'][444]);
         $this->assertNull($formView->getError());
@@ -307,8 +306,8 @@ class Test extends TestCase
         $this->assertEquals('collection', $formField->getType());
         $this->assertNull($formField->getValue());
 
-        $this->assertEquals('app\admin\forms\InvoicePositionForm', $formField->getOptions()['class']);
-        $this->assertEquals('app\admin\entities\InvoicePosition', $formField->getOptions()['entityClass']);
+        $this->assertEquals('test\forms\helpers\forms\InvoicePositionForm', $formField->getOptions()['class']);
+        $this->assertEquals('test\forms\helpers\entities\InvoicePosition', $formField->getOptions()['entityClass']);
         $this->assertEquals('Pozycje', $formField->getOptions()['label']);
         $this->assertEquals('positions.tpl', $formField->getOptions()['template']);
         $this->assertTrue($formField->getOptions()['mapped']);
@@ -383,7 +382,7 @@ class Test extends TestCase
         $this->assertEquals('333', $formField->getValue());
         $this->assertEquals('Kategoria główna', $formField->getOptions()['label']);
         $this->assertNull($formField->getOptions()['form']);
-        $this->assertEquals('app\admin\entities\InvoiceCategory', $formField->getOptions()['class']);
+        $this->assertEquals('test\forms\helpers\entities\InvoiceCategory', $formField->getOptions()['class']);
         $this->assertNull($formField->getOptions()['entityClass']);
         $this->assertEquals('Kategoria 1', $formField->getOptions()['choices']['222']);
         $this->assertEquals('Kategoria 3', $formField->getOptions()['choices']['444']);
@@ -451,7 +450,7 @@ class Test extends TestCase
         $this->assertEquals('5', $formField->getValue()[0]);
         $this->assertEquals('6', $formField->getValue()[1]);
         $this->assertEquals('Dokumenty magazynowe', $formField->getOptions()['label']);
-        $this->assertEquals('app\admin\entities\WarehouseDocument', $formField->getOptions()['class']);
+        $this->assertEquals('test\forms\helpers\entities\WarehouseDocument', $formField->getOptions()['class']);
         $this->assertEquals('PZ-1/01/2021', $formField->getOptions()['choices'][5]);
         $this->assertEquals('PZ-2/01/2021', $formField->getOptions()['choices'][6]);
         $this->assertEquals('PZ-3/01/2021', $formField->getOptions()['choices'][7]);
@@ -466,7 +465,7 @@ class Test extends TestCase
         $this->assertEquals('222', $formField->getValue()[0]);
         $this->assertEquals('333', $formField->getValue()[1]);
         $this->assertEquals('Kategorie faktury', $formField->getOptions()['label']);
-        $this->assertEquals('app\admin\entities\InvoiceCategory', $formField->getOptions()['class']);
+        $this->assertEquals('test\forms\helpers\entities\InvoiceCategory', $formField->getOptions()['class']);
         $this->assertEquals('Kategoria 1', $formField->getOptions()['choices'][222]);
         $this->assertEquals('Kategoria 2', $formField->getOptions()['choices'][333]);
         $this->assertEquals('Kategoria 3', $formField->getOptions()['choices'][444]);
@@ -498,7 +497,7 @@ class Test extends TestCase
         $this->assertEquals('selectType', $formField->getType());
         $this->assertEquals('5', $formField->getValue());
         $this->assertEquals('Płatnik', $formField->getOptions()['label']);
-        $this->assertEquals('app\admin\entities\Customer', $formField->getOptions()['class']);
+        $this->assertEquals('test\forms\helpers\entities\Customer', $formField->getOptions()['class']);
         $this->assertEquals('Kontrahent 1', $formField->getOptions()['choices'][4]);
         $this->assertEquals('Kontrahent 2', $formField->getOptions()['choices'][5]);
         $this->assertEquals('Kontrahent 3', $formField->getOptions()['choices'][6]);
@@ -511,7 +510,7 @@ class Test extends TestCase
         $this->assertEquals('radiobuttonType', $formField->getType());
         $this->assertEquals('333', $formField->getValue());
         $this->assertEquals('Kategoria główna', $formField->getOptions()['label']);
-        $this->assertEquals('app\admin\entities\InvoiceCategory', $formField->getOptions()['class']);
+        $this->assertEquals('test\forms\helpers\entities\InvoiceCategory', $formField->getOptions()['class']);
         $this->assertEquals('Kategoria 1', $formField->getOptions()['choices'][222]);
         $this->assertEquals('Kategoria 3', $formField->getOptions()['choices'][444]);
         $this->assertNull($formView->getError());

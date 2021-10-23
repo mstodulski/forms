@@ -1,6 +1,6 @@
 <?php
 
-namespace app\admin\entities;
+namespace test\forms\helpers\entities;
 
 class WarehouseDocument
 {
