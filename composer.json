@@ -1,16 +1,31 @@
 {
 	"name": "mstodulski/forms",
+	"license": "MIT",
 	"description": "",
-    "require": {
+	"require": {
 		"php": ">=8.0",
 		"phpunit/phpunit": "9.5.*",
 		"symfony/var-dumper": "5.2.x-dev",
-		"smarty/smarty": "3.1.*"
+		"smarty/smarty": "3.1.*",
+		"ext-pdo": "*"
 	},
+	"keywords": ["library", "orm", "db", "database"],
+	"homepage": "https://devsprint.pl",
+	"authors": [
+		{
+			"name": "Marcin Stodulski",
+			"homepage": "https://devsprint.pl",
+			"role": "Developer"
+		}
+	],
 	"autoload": {
 		"psr-4": {
 			"mstodulski\\forms\\": "src",
 			"app\\admin\\": "tests/helpers"
 		}
+	},
+	"bin": ["bin/morm"],
+	"require-dev": {
+		"ext-apcu": "*"
 	}
 }
