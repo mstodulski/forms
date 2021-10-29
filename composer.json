@@ -22,9 +22,5 @@
 			"mstodulski\\forms\\": "src",
 			"test\\forms\\helpers\\": "tests/helpers"
 		}
-	},
-	"bin": ["bin/morm"],
-	"require-dev": {
-		"ext-apcu": "*"
 	}
 }
