@@ -31,6 +31,14 @@ class PasswordType implements PasswordFieldTypeInterface {
 
     public function validate($data, bool $nullable) : ?FormError
     {
-        return null;
+        $formError = null;
+
+        if (!$nullable && (trim($data) == '')) {
+            $formError = new FormError();
+            $formError->setCurrentValue($data);
+            $formError->setErrorMessage('Value cannot be empty.');
+        }
+
+        return $formError;
     }
 }

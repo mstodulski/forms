@@ -266,7 +266,6 @@ class Form
 
         foreach ($requestFields as $requestFieldName => $requestFieldValue) {
             if (isset($this->fields[$requestFieldName])) {
-
                 /** @var FormField $formField */
                 $formField = $this->fields[$requestFieldName];
                 if ($formField instanceof FormField) {
@@ -324,7 +323,6 @@ class Form
                         $options = $formField->getOptions();
 
                         if (!isset($options['mapped']) || ($options['mapped'] === true)) {
-
                             if (isset($options['class'])) {
                                 if (is_subclass_of($options['class'], self::class)) {
                                     //dla kolekcji formularzy
@@ -609,6 +607,11 @@ class Form
     public function getField(string $fieldName) : FormField|self
     {
         return $this->fields[$fieldName];
+    }
+
+    public function getFormName() : string
+    {
+        return $this->formName;
     }
 
     private function getFieldFullName(FormView $formView) : string
