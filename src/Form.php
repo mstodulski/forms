@@ -81,12 +81,18 @@ class Form
             $formField->setValue(isset($this->entity) ? $this->getValueFromEntity($this->entity, $fieldName, $type, $options): null);
 
             if (isset($this->entity)) {
-                if ($options['reverse'] !== null) {
-                    $formField->setFormValue($options['reverse']($formField->getValue()));
-                } elseif (($this->dbBridge !== null) && (isset($options['class']))) {
-                    $formField->setFormValue($this->dbBridge->reverse($formField, $formField->getValue()));
+                if (is_object($formField->getValue()) && is_subclass_of($formField->getValue(), Iterator::class)) {
+                    $value = iterator_to_array($formField->getValue());
                 } else {
-                    $formField->setFormValue($typeObject->reverse($formField->getValue()));
+                    $value = $formField->getValue();
+                }
+
+                if ($options['reverse'] !== null) {
+                    $formField->setFormValue($options['reverse']($value));
+                } elseif (($this->dbBridge !== null) && (isset($options['class']))) {
+                    $formField->setFormValue($this->dbBridge->reverse($formField, true, $value));
+                } else {
+                    $formField->setFormValue($typeObject->reverse($value));
                 }
             }
 
@@ -137,7 +143,14 @@ class Form
                 $formValues = [];
                 foreach ($values as $value) {
                     if (is_object($value)) {
-                        $formValues[] = $this->getValueFromEntity($value, 'id', $type, $options);
+
+                        if ($options['reverse'] !== null) {
+                            $formValues[] = $options['reverse']($value);
+                        } elseif (($this->dbBridge !== null) && (isset($options['class']))) {
+                            $formValues[] = $this->dbBridge->reverse($formField, false, $value, $this->entity);
+                        } else {
+                            $formValues[] = $typeObject->reverse($value);
+                        }
                     } else {
                         $formValues[] = $value;
                     }
@@ -288,7 +301,15 @@ class Form
                                 $this->entity->$setter($options['transform']($formField->getFormValue()));
                             } elseif (($this->dbBridge !== null) && (isset($options['class']))) {
                                 //potem funkcja transform z db bridge
-                                $this->entity->$setter($this->dbBridge->transform($formField, $formField->getFormValue()));
+
+                                $interfaces = class_implements($formField->getType());
+
+                                $singleValue = true;
+                                if (isset($interfaces[CollectionFieldTypeInterface::class])) {
+                                    $singleValue = false;
+                                }
+
+                                $this->entity->$setter($this->dbBridge->transform($formField, $singleValue, $formField->getFormValue()));
                             } else {
                                 //a na końcu próbujemy nadać wartość, jeśli nie jest zdefiniowana funkcja transform dla pola formularza oraz nie ma dbBridge
                                 $this->entity->$setter($typeObject->transform($formField->getFormValue()));
@@ -311,7 +332,7 @@ class Form
                                     $this->entity->$setter($options['transform']($formField->getFormValue()));
                                 } elseif (($this->dbBridge !== null) && (isset($options['class']))) {
                                     //potem funkcja transform z db bridge
-                                    $this->entity->$setter($this->dbBridge->transform($formField, $formField->getFormValue()));
+                                    $this->entity->$setter($this->dbBridge->transform($formField, true, $formField->getFormValue()));
                                 } else {
                                     //a na końcu próbujemy nadać wartość, jeśli nie jest zdefiniowana funkcja transform dla pola formularza oraz nie ma dbBridge
                                     $this->entity->$setter($typeObject->transform($formField->getFormValue()));
@@ -321,6 +342,7 @@ class Form
                     } elseif ((isset($interfaces[CollectionFieldTypeInterface::class]))) {
 
                         $options = $formField->getOptions();
+
 
                         if (!isset($options['mapped']) || ($options['mapped'] === true)) {
                             if (isset($options['class'])) {
@@ -350,6 +372,12 @@ class Form
                                         if (!method_exists($this->entity, $getter)) throw new Exception('Class ' . get_class($this->entity) . ' must have a ' . $getter . '() method');
                                         $collection = $this->entity->$getter();
 
+                                        $originalClass = null;
+                                        if (is_object($collection) && is_subclass_of($collection, Iterator::class)) {
+                                            $originalClass = get_class($collection);
+                                            $collection = iterator_to_array($collection);
+                                        }
+
                                         foreach ($formFieldFieldsIndexes as $indexToRemove) {
                                             if (isset($collection[$indexToRemove])) unset($collection[$indexToRemove]);
                                         }
@@ -358,6 +386,14 @@ class Form
                                             if (!isset($collection[$index])) {
                                                 $collection[$index] = new $options['entityClass']();
                                             }
+                                        }
+
+                                        if ($originalClass !== null) {
+                                            $collectionObject = new $originalClass($formField->getOptions()['entityClass']);
+                                            foreach ($collection as $element) {
+                                                $collectionObject->add($element);
+                                            }
+                                            $collection = $collectionObject;
                                         }
 
                                         $this->entity->$setter($collection);
@@ -383,11 +419,11 @@ class Form
                                     //dla kolekcji czegoś innego
                                     $valid = $this->validateFormFieldAndSetValue($formField, $requestFieldValue);
 
-                                    if (isset($this->entity) && $valid && $options['mapped']) {
+                                    if (isset($this->entity) && $valid) {
                                         if ($options['transform'] !== null) {
                                             $value = $options['transform']($requestFieldValue);
                                         } elseif ($this->dbBridge !== null) {
-                                            $value = $this->dbBridge->transform($formField, $requestFieldValue);
+                                            $value = $this->dbBridge->transform($formField, false, $requestFieldValue, $this->entity);
                                         } else {
                                             throw new Exception('Field ' . $requestFieldName . ' must have a "transform" option, or DBBridge must be defined.');
                                         }
@@ -438,7 +474,7 @@ class Form
                                     $transformedValue = $options['transform']($formField->getFormValue(), $options['nullable']);
                                 } elseif (($this->dbBridge !== null) && (isset($options['class']))) {
                                     //potem funkcja transform z db bridge
-                                    $transformedValue = $this->dbBridge->transform($formField, $formField->getFormValue());
+                                    $transformedValue = $this->dbBridge->transform($formField, true, $formField->getFormValue());
                                 } else {
                                     //a na końcu próbujemy nadać wartość, jeśli nie jest zdefiniowana funkcja transform dla pola formularza oraz nie ma dbBridge
                                     $transformedValue = $typeObject->transform($formField->getFormValue(), $options['nullable']);
