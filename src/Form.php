@@ -20,7 +20,7 @@ use mstodulski\forms\types\NoValueFieldTypeInterface;
 use mstodulski\forms\types\PasswordFieldTypeInterface;
 use mstodulski\forms\types\SimpleFieldTypeInterface;
 
-class Form
+abstract class Form
 {
     protected object $entity;
     protected string $formName;
@@ -318,6 +318,7 @@ class Form
                     } elseif (isset($interfaces[PasswordFieldTypeInterface::class])) {
                         //dla pola reprezentującego hasło
                         $valid = $this->validateFormFieldAndSetValue($formField, $requestFieldValue);
+
                         if ($requestFieldValue != '') {
                             if (isset($this->entity) && $valid && $options['mapped']) {
                                 $setter = 'set' . ucfirst($formField->getFieldName());
@@ -497,6 +498,23 @@ class Form
                         }
                     }
                 } elseif ($formField instanceof self) {
+                    if ($this->entity !== null) {
+
+                        $getter = 'get' . ucfirst($formField->formName);
+                        $setter = 'set' . ucfirst($formField->formName);
+                        if (!method_exists($this->entity, $getter)) throw new Exception('Class ' . get_class($this->entity) . ' must have a ' . $getter . '() method');
+                        $entityValue = $this->entity->$getter();
+
+                        if ($entityValue === null) {
+                            if (!method_exists($this->entity, $setter)) throw new Exception('Class ' . get_class($this->entity) . ' must have a ' . $setter . '() method');
+
+                            $entityClass = $formField->getEntityClass();
+                            $entity = new $entityClass();
+                            $this->entity->$setter($entity);
+                            $formField->setEntity($entity);
+                        }
+                    }
+
                     $formField->processRequest([$formField->formName => $requestFieldValue]);
                 }
             }
@@ -524,6 +542,13 @@ class Form
     {
         return $this->entity ?? null;
     }
+
+    public function setEntity(object $entity)
+    {
+        $this->entity = $entity;
+    }
+
+    abstract public function getEntityClass() : string;
 
     #[Pure] private function buildIdForField(FormView $formView) : string
     {
