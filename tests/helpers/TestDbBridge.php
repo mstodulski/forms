@@ -1,24 +1,17 @@
 <?php
-/**
- * This file is part of the EasyCore package.
- *
- * (c) Marcin Stodulski <marcin.stodulski@devsprint.pl>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+namespace test\forms\helpers;
 
-namespace mstodulski\forms;
-
+use mstodulski\forms\FormField;
 use test\forms\helpers\entities\Customer;
 use test\forms\helpers\entities\InvoiceCategory;
 use test\forms\helpers\entities\WarehouseDocument;
 use Exception;
+use Throwable;
 
 class TestDbBridge
 {
     /** @throws Exception */
-    public function transform(FormField $formField, mixed $value)
+    public function transform(FormField $formField, bool $singleValue, mixed $value, object $parent = null) : array|object|null
     {
         if (!isset($formField->getOptions()['class'])) {
             throw new Exception('Form field ' . $formField->getFieldName() . ' must have a "class" option.');
@@ -53,9 +46,9 @@ class TestDbBridge
         }
     }
 
-    public function reverse(FormField $formField, mixed $value) : mixed
+    public function reverse(FormField $formField, bool $singleValue, mixed $value, object $parent = null) : mixed
     {
-        return $value->getId();
+        return ($value === null) ? null : $value->getId();
     }
 
     public function choices($objectClass) : array

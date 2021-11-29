@@ -6,10 +6,10 @@ use test\forms\helpers\entities\WarehouseDocument;
 use test\forms\helpers\forms\InvoiceForm;
 use mstodulski\forms\FormError;
 use mstodulski\forms\FormView;
-use mstodulski\forms\TestDbBridge;
 use mstodulski\forms\types\FileType;
 use mstodulski\forms\types\TextType;
 use PHPUnit\Framework\TestCase;
+use test\forms\helpers\TestDbBridge;
 
 class Test extends TestCase
 {
@@ -891,7 +891,7 @@ class Test extends TestCase
                         0 => [
                             "name" => "",
                             "quantity" => "",
-                            "sendDate" => "2021-10-15 01:01:01",
+                            "sendDate" => date('Y-m-d H:i:s'),
                             "price" => "asd",
                         ],
                         1 => [

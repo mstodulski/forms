@@ -14,22 +14,18 @@ use Exception;
 use Iterator;
 use JetBrains\PhpStorm\Pure;
 use mstodulski\forms\types\CollectionFieldTypeInterface;
-use mstodulski\forms\types\EntityFieldTypeInterface;
 use mstodulski\forms\types\FileTypeInterface;
 use mstodulski\forms\types\NoValueFieldTypeInterface;
 use mstodulski\forms\types\PasswordFieldTypeInterface;
 use mstodulski\forms\types\SimpleFieldTypeInterface;
 
-abstract class Form
+class Form
 {
     protected object $entity;
     protected string $formName;
     private array $fields = [];
     private array $errorsForFields = [];
     private ?object $dbBridge = null;
-
-    private const ERROR_SOURCE_FORM_FIELD = 'formField';
-    private const ERROR_SOURCE_FORM_ERRORS = 'formErrorFields';
 
     const defaultFieldOptions = [
         'form' => null, //klasa formularza, cały formularz jest wstawiany w miejsce pola
@@ -228,7 +224,7 @@ abstract class Form
                             foreach ($field as $singleFieldName => $singleField) {
                                 $singleFieldType = $singleField->getType();
                                 $singleSubformView = new FormView();
-                                $this->defineValuesForSubformView($singleSubformView, $singleFieldType, $singleField, $path, [$fieldName, $index, $singleFieldName], self::ERROR_SOURCE_FORM_ERRORS);
+                                $this->defineValuesForSubformView($singleSubformView, $singleFieldType, $singleField, $path, [$fieldName, $index, $singleFieldName], FormErrorSource::formErrorFields);
                                 $newFormView->addField($singleFieldName, $singleSubformView);
                             }
 
@@ -241,7 +237,7 @@ abstract class Form
 
                         break;
                     default:
-                        $this->defineValuesForSubformView($subformView, $fieldType, $formField, $path, [$fieldName], self::ERROR_SOURCE_FORM_FIELD);
+                        $this->defineValuesForSubformView($subformView, $fieldType, $formField, $path, [$fieldName], FormErrorSource::formField);
                         break;
                 }
 
@@ -498,7 +494,7 @@ abstract class Form
                         }
                     }
                 } elseif ($formField instanceof self) {
-                    if ($this->entity !== null) {
+                    if (isset($this->entity) && ($this->entity !== null)) {
 
                         $getter = 'get' . ucfirst($formField->formName);
                         $setter = 'set' . ucfirst($formField->formName);
@@ -548,7 +544,10 @@ abstract class Form
         $this->entity = $entity;
     }
 
-    abstract public function getEntityClass() : string;
+    public function getEntityClass() : string
+    {
+        return '';
+    }
 
     #[Pure] private function buildIdForField(FormView $formView) : string
     {
@@ -579,7 +578,7 @@ abstract class Form
         return true;
     }
 
-    private function defineValuesForSubformView(FormView $subformView, SimpleFieldTypeInterface|string $fieldType, FormField $formField, array $path, array $thisFieldPath, string $getErrorFrom)
+    private function defineValuesForSubformView(FormView $subformView, SimpleFieldTypeInterface|string $fieldType, FormField $formField, array $path, array $thisFieldPath, FormErrorSource $getErrorFrom)
     {
         $subformView->setType($fieldType::getAlias());
         $subformView->setValue($formField->getFormValue());
@@ -598,9 +597,9 @@ abstract class Form
         $subformView->setName($this->getFieldFullName($subformView));
         $subformView->setId($this->buildIdForField($subformView));
 
-        if ($getErrorFrom == self::ERROR_SOURCE_FORM_FIELD) {
+        if ($getErrorFrom == FormErrorSource::formField) {
             $subformView->setError($formField->getError());
-        } elseif ($getErrorFrom == self::ERROR_SOURCE_FORM_ERRORS) {
+        } elseif ($getErrorFrom == FormErrorSource::formErrorFields) {
             $subformView->setError($this->getErrorForField($this->buildIdForField($subformView)));
         }
     }

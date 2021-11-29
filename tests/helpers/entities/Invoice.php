@@ -75,7 +75,7 @@ class Invoice
         return $this->warehouseDocuments;
     }
 
-    public function setWarehouseDocuments(array $warehouseDocuments): void
+    public function setWarehouseDocuments(?array $warehouseDocuments): void
     {
         /** @var WarehouseDocument $warehouseDocument */
         foreach ($warehouseDocuments as $warehouseDocument) {

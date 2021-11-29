@@ -1,6 +1,6 @@
 <?php
 use test\forms\helpers\forms\InvoiceForm;
-use mstodulski\forms\TestDbBridge;
+use test\forms\helpers\TestDbBridge;
 
 require_once 'tests/bootstrap.php';
 
